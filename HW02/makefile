@@ -7,5 +7,5 @@ hw2:
 clean:
 	rm -f *.o *.log listdir
 
-#valgrind:
-#	valgrind --leak-check=full ./listdir ece this
+valgrind:
+	valgrind --leak-check=full ./listdir oto this

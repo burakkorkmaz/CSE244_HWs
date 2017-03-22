@@ -56,19 +56,38 @@ int explorePath(const char * string,const char * pathName);
  */
 int isDirectory(const char * pathName);
 
+FILE * createLogFile(FILE * logFP);
+
 /* MAIN FUNCTION */
 int main(int argc, char const *argv[]) {
 
-
+    pid_t pid = getpid();
+    int counter = 0;
     //Usage of 'listdir' command
     if(3 != argc){
         printf("Usage: %s string <directory>\n",argv[0]);
         return ERROR;
     }
 
-    explorePath(argv[1],argv[2]);
-    //printf("Totally %d '%s' matches FOUND.\n",
+    remove("log.log");
+    printf("Total: %d\n",explorePath(argv[1],argv[2]));
         //searchInFile(argv[1], argv[2]), argv[1]);
+
+
+    if(pid > 0){
+        char ch;
+        FILE *log = NULL;
+        log = createLogFile(log);
+        while((ch = (char) fgetc(log)) != EOF){
+            if(ch == '\n'){
+                ++counter;
+            }
+        }
+        fprintf(log,"Totally %d %s is found.\n",counter,argv[1]);
+        printf("Totally %d %s is found.\n",counter,argv[1]);
+        fclose(log);
+
+    }
 
   return 0;
 }
@@ -78,13 +97,14 @@ int explorePath(const char * string,const char * pathName){
     char path[PATH_MAX];
     strcpy(path, pathName);
     int totalMatches = 0;
-    pid_t pid;
+    pid_t pid = getpid();
     int status = 0;
 
     struct dirent * dirEntPointer;
     DIR * direcPointer;
     if((direcPointer = opendir(pathName)) == NULL){
         perror ("Failed to open directory");
+        return ERROR;
     }
 
 
@@ -97,18 +117,16 @@ int explorePath(const char * string,const char * pathName){
         if(isDirectory(currPath)){
             if(strcmp(dirEntPointer->d_name ,".") != 0 &&
                 strcmp(dirEntPointer->d_name ,"..") != 0){
-                strcat(path, "/");
-                strcat(path, dirEntPointer->d_name);
-
+                    //printf("PATH:%s\n->%s\n",currPath,  dirEntPointer->d_name);
                 if((pid = fork()) < 0){
                     perror("fork() failed.");
                     status = ERROR;
                 }
                 //Child Process
                 else if(0 == pid){
+                    //printf("child %d -> dir of %d\n",getpid(), getppid() );
                     while ((closedir(direcPointer) == -1) && (errno == EINTR));
-                    printf("%s\n->%s\n",path,  dirEntPointer->d_name);
-                    explorePath(string, path);
+                    explorePath(string, currPath);
                     exit(1);
                 }
 
@@ -116,10 +134,6 @@ int explorePath(const char * string,const char * pathName){
         }
         else{
 
-            //printf("%s\n->%s\n",currPath,  dirEntPointer->d_name);
-
-
-            //Fork the process
             if((pid = fork()) < 0){
                 perror("fork() failed.");
                 status = ERROR;
@@ -128,17 +142,15 @@ int explorePath(const char * string,const char * pathName){
             else if(0 == pid){
                 while ((closedir(direcPointer) == -1) && (errno == EINTR));
                 totalMatches = searchInFile(string,currPath);
-                exit(1);
+                //printf("child %d of %d ->file  match:%d\n",getpid(), getppid(), totalMatches);
+                exit(totalMatches);
             }
         }
-
+    }
+    while(wait(&status) > 0){
+        printf("Waiting processes...\n" );
     }
 
-    while(wait(&status) < 0){
-        //printf("status: %d\n", status);
-
-    }
-    //printf("TOTAL: %d\n", totalMatches);
 
     while ((closedir(direcPointer) == -1) && (errno == EINTR)) ;
     return totalMatches;
@@ -154,10 +166,18 @@ int isDirectory(const char * pathName){
     return FALSE;
 }
 
+FILE * createLogFile(FILE * logFP){
+
+    char path[PATH_MAX];
+    getcwd(path,PATH_MAX);
+    strcat(path,"/log.log");    // log file create
+    logFP = fopen(path,"a+");
+    return logFP;
+}
 
 int searchInFile(const char* findString, const char* fileName){
     /* VARIABLE DECLARATIONS */
-    int stringSize = strlen(findString);
+    int stringSize = (int) strlen(findString);
     // Row and columns start from 1.
     int currentRow = BEGINNING;
     int currentColumn = BEGINNING;
@@ -166,17 +186,15 @@ int searchInFile(const char* findString, const char* fileName){
     char currentChar = '\0';
     int prevLocation = 0; //Specify file location before calling findMatch(...)
 
-    char path[PATH_MAX];
-    getcwd(path,PATH_MAX);
-    strcat(path,"/log.log");    // log file create
-    FILE* logFileP = fopen(path,"a+");
+    FILE* logFileP = NULL;
+    logFileP = createLogFile(logFileP);
     FILE* filePointer = fopen(fileName,"r");
     if(filePointer == NULL){
         fprintf(stderr,"%s could NOT found.\n", fileName );
         return ERROR;
     }
 
-    currentChar = getc(filePointer);
+    currentChar = (char) getc(filePointer);
     while (currentChar != EOF) {
 
         if(currentChar == findString[0]){
@@ -186,7 +204,7 @@ int searchInFile(const char* findString, const char* fileName){
                     fileName, currentRow, currentColumn, findString);
             }
             else{
-                prevLocation = ftell(filePointer);
+                prevLocation = (int) ftell(filePointer);
 
                 if(findMatch(filePointer,findString)){
                     NumOfMatches++;
@@ -209,7 +227,7 @@ int searchInFile(const char* findString, const char* fileName){
         else{
             ++currentColumn;
         }
-        currentChar = getc(filePointer);    //continue reading character
+        currentChar = (char) getc(filePointer);    //continue reading character
     }
     fclose(logFileP);
     fclose(filePointer);
@@ -221,7 +239,7 @@ int findMatch(FILE *fp,const char* string){
     char ch;
     int i = 1; // start from second character of string
     do{
-        ch = getc(fp);
+        ch = (char) getc(fp);
         if(ch == string[i]){
             ++i;
         }
