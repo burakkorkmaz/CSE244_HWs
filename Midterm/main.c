@@ -1,27 +1,55 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+
 #include <math.h>
-
-
+#include <time.h>
 
 
 void swapRows(double **matrix, int nRow, int mRow);
 
+double** allocateMatrix(int n){
+    double ** A;
+    int i;
+    A = (double**) malloc(n * sizeof(double*));
+    if (!A) {
+        perror("\nMatrix Allocation Error\n");
+        return NULL;
+    }
+
+    for (i = 0; i < n; ++i) {
+        A[i] = (double*) malloc(n * sizeof(double));
+        if (!A[i]) {
+            perror("\nMatrix Allocation Error\n");
+            return NULL;
+        }
+    }
+    return A;
+}
+
+void printMatrix(const double** M, int n) {
+
+    for (int i = 0; i < n; ++i) {
+        printf("| ");
+        for (int j = 0; j < n; ++j) {
+            printf("%5.2f ", M[i][j]);
+        }
+        printf("|\n");
+    }
+    printf("\n");
+}
+
+
 double **matrixGenerator(int n) {
     int i, j, k;
     double **matrix = NULL;
-    matrix = (double **) malloc((n) * sizeof(double *));
-    if (matrix == NULL) {
-        fprintf(stderr, "Matrix Allocation Error!\n");
-        return NULL;
-    }
+
+    matrix = allocateMatrix(n);
 
     for (k = 0; k < n; ++k) {
         matrix[k] = (double *) malloc((n + 1) * sizeof(double));
     }
-    //double arr = {10, 5}; //{0,-7 ,5 ,8, -1,  9, -3, 4,  7, -5, 5,  8, 3 , -4, 7,-9 };
 
+    srand();
     for (i = 0; i < n; ++i) {
         for (j = 0; j < n; ++j) {
             int random = rand() % 21 - 10;    //-10 ile 10 arası
@@ -33,11 +61,21 @@ double **matrixGenerator(int n) {
     return matrix;
 }
 
-double determinantOfMatrix(double **matrix, int n) {
+double determinantOfMatrix(const double **A, int n) {
     int i, j, k;
     double ratio;
     double det = 1;
+    double ** matrix = allocateMatrix(n);
 
+    /* copying the matrix */
+    for (i = 0; i < n; ++i) {
+        for (j = 0; j < n; ++j) {
+            matrix[i][j] = A[i][j];
+        }
+
+    }
+
+    /* apply gaussian with pivoting before determinant */
     for (k = 0; k < n; ++k) {
         if (matrix[k][k] == 0.0) {
             swapRows(matrix, k, n);
@@ -51,26 +89,11 @@ double determinantOfMatrix(double **matrix, int n) {
             }
         }
     }
-
+    /* Find determinant of Matrix */
     for (i = 0; i < n; i++)
 
         det *= matrix[i][i];
 
-}
-
-
-int main(int argc, char **argv) {
-    srand(time(NULL));
-
-
-
-    double **A;
-    int n = atoi(argv[2]);
-    A = matrixGenerator(n);
-
-    printf("Det:%.2f\n", determinantOfMatrix(A, n));
-
-    return 0;
 }
 
 void swapRows(double **matrix, int nRow, int size) {
@@ -92,7 +115,7 @@ void swapRows(double **matrix, int nRow, int size) {
     }
 }
 
-void Transpose(double **a, int n) {
+void transpose(double **a, int n) {
     int i, j;
     double tmp;
 
@@ -105,18 +128,23 @@ void Transpose(double **a, int n) {
     }
 }
 
-void CoFactor(double **a, int size, double **b) {
+void coFactor(const double **a, int size, double **b) {
     int i, j, k, l, m, n;
     double det;
     double **c;
+
+    double x=0;
+    double cof = 0;
+    double cof2 = 0;
+
 
     c = malloc((size - 1) * sizeof(double *));
     for (i = 0; i < size - 1; i++)
         c[i] = malloc((size - 1) * sizeof(double));
 
-    for (j = 0; j < size; j++) {
-        for (i = 0; i < size; i++) {
-
+    for (i = 0; i < size; i++) {
+        for (j = 0; j < size; j++) {
+            cof = a[i][j];
             /* Form the adjoint a_ij */
             m = 0;
             for (k = 0; k < size; k++) {
@@ -124,9 +152,11 @@ void CoFactor(double **a, int size, double **b) {
                     continue;
                 n = 0;
                 for (l = 0; l < size; l++) {
+                    cof2 = a[k][l];
                     if (l == j)
                         continue;
                     c[m][n] = a[k][l];
+                    x = a[k][l];
                     n++;
                 }
                 m++;
@@ -142,4 +172,51 @@ void CoFactor(double **a, int size, double **b) {
     for (i = 0; i < size - 1; i++)
         free(c[i]);
     free(c);
+}
+
+
+double** inverseOfMatrix(const double **A, int size){
+    double** B;
+    int i,j;
+    double det = determinantOfMatrix(A,size);
+    if(det == 0){
+        fprintf(stderr, "Determinant is zero, can not be inverse of Matrix");
+        return NULL;
+    }
+
+    B = allocateMatrix(size);
+    coFactor(A,size,B);
+    transpose(B,size);
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            B[i][j] /= det;
+        }
+
+    }
+    return B;
+}
+
+
+
+int main(int argc, char **argv) {
+
+    double **A;
+    double **B = NULL;
+    int n = atoi(argv[1]);
+    A = matrixGenerator(n);
+    printf("Det:%.2f\n", determinantOfMatrix(A, n));
+    B = inverseOfMatrix(A,n);
+    if(B == NULL){
+        perror("inverse");
+        return -1;
+    }
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            printf("%6.3f ", B[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
 }
