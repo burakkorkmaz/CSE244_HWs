@@ -1,0 +1,3 @@
+/home/eksor/GitHub/CSE244_HWs/HW05/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/eksor/GitHub/CSE244_HWs/HW05/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/eksor/GitHub/CSE244_HWs/HW05/cmake-build-debug/CMakeFiles/grepThwShandMQ.dir

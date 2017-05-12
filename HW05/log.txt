@@ -1,0 +1,6 @@
+ThID: 140244457051904 PID: 2731 cmake-build-debug/t3/1: [1,1] ece first character is found.
+ThID: 140244457051904 PID: 2731 cmake-build-debug/t3/1: [1,5] ece first character is found.
+ThID: 140244448659200 PID: 2731 cmake-build-debug/t3/1: [1,1] ece first character is found.
+ThID: 140244448659200 PID: 2731 cmake-build-debug/t3/1: [1,5] ece first character is found.
+ThID: 140244440266496 PID: 2731 cmake-build-debug/t3/1: [1,1] ece first character is found.
+ThID: 140244440266496 PID: 2731 cmake-build-debug/t3/1: [1,5] ece first character is found.
