@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblm.a  CMakeFiles/lm.dir/main.c.o
+/usr/bin/ranlib liblm.a

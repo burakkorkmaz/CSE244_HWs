@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/showResults.dir/showResults.c.o  -o showResults -lm -D_POSIX_C_SOURCE 

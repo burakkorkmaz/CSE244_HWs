@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/seeWhat.dir/seeWhat.c.o  -o seeWhat -lm -D_POSIX_C_SOURCE 

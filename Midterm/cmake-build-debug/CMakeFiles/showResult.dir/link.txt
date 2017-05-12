@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/showResult.dir/main.c.o  -o showResult 

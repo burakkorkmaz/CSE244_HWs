@@ -1,0 +1,5 @@
+/home/eksor/GitHub/CSE244_HWs/Midterm/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/eksor/GitHub/CSE244_HWs/Midterm/cmake-build-debug/CMakeFiles/showResults.dir
+/home/eksor/GitHub/CSE244_HWs/Midterm/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/eksor/GitHub/CSE244_HWs/Midterm/cmake-build-debug/CMakeFiles/seeWhat.dir
+/home/eksor/GitHub/CSE244_HWs/Midterm/cmake-build-debug/CMakeFiles/timeServer.dir

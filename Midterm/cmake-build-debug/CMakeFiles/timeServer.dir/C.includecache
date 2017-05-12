@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/eksor/GitHub/CSE244_HWs/Midterm/timeServer.c
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+time.h
+-
+signal.h
+-
+

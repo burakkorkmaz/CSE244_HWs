@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/eksor/GitHub/CSE244_HWs/Midterm/seeWhat.c
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+signal.h
+-
+fcntl.h
+-
+math.h
+-
+

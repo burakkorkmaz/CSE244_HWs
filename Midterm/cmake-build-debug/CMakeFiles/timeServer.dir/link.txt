@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/timeServer.dir/timeServer.c.o  -o timeServer -lm -D_POSIX_C_SOURCE 
