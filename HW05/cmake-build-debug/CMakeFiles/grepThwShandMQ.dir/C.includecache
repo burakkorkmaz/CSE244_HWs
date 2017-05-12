@@ -7,6 +7,8 @@
 #IncludeRegexTransform: 
 
 /home/eksor/GitHub/CSE244_HWs/HW05/main.c
+sys/shm.h
+-
 stdio.h
 -
 string.h
@@ -30,5 +32,11 @@ pthread.h
 semaphore.h
 -
 wait.h
+-
+sys/time.h
+-
+sys/msg.h
+-
+sys/ipc.h
 -
 

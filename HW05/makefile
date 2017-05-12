@@ -5,5 +5,5 @@ hw5:
 	gcc main.o -o grepThwShandMQ -lpthread
 
 clean:
-	rm -f *.o grepThwShandMQ log.log
+	rm -f *.o grepThwShandMQ log.txt
 
