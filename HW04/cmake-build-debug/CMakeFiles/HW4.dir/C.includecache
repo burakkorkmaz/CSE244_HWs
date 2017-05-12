@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/eksor/GitHub/CSE244_HWs/HW04/hw4.c
+unistd.h
+-
+dirent.h
+-
+errno.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+sys/stat.h
+-
+sys/wait.h
+-
+pthread.h
+-
+semaphore.h
+-
+fcntl.h
+-
+time.h
+-
+sys/time.h
+-
+

@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/HW4.dir/hw4.c.o  -o HW4 -lpthread 
