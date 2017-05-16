@@ -80,6 +80,7 @@ dkms.conf
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
+cmake-build-debug/
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -404,4 +405,4 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/c,c++,java,python,linux,intellij,intellij+iml,clion,pycharm,netbeans,windows,sublimetext
 
-Midterm/141044041/
+cmake-build-debug/
